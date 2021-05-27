@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: faq-broker
-          image: iobert/broker:latest
+          image: ghcr.io/sap-samples/kyma-mtx-faq-broker:latest
           args:
             - "--targetServiceName"
             - "faq-backend"

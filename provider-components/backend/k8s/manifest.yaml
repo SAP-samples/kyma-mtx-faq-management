@@ -30,7 +30,7 @@ spec:
   ports:
     - name: http
       port: 8080
-      targetPort: 4004 
+      targetPort: 4004
   selector:
     app: faq-backend
 ---
@@ -50,9 +50,9 @@ spec:
     metadata:
       labels: # labels to select/identify the deployment
         app: faq-backend
-    spec:     # pod spec
+    spec: # pod spec
       containers:
-        - image: iobert/backend:latest # image we pushed
+        - image: ghcr.io/sap-samples/kyma-mtx-faq-backend:latest # image we pushed
           name: faq-backend
           imagePullPolicy: Always
           env:

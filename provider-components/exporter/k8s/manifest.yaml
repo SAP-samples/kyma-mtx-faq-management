@@ -48,7 +48,7 @@ spec:
     spec:
       containers:
         - name: csv
-          image: iobert/exporter:latest
+          image: ghcr.io/sap-samples/kyma-mtx-faq-exporter:latest
           resources:
             requests:
               memory: 32Mi

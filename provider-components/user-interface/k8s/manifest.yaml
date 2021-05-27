@@ -157,7 +157,7 @@ spec:
         app: kyma-faq-ui-shell
     spec:
       containers:
-        - image: iobert/ui:latest # image we pushed
+        - image: ghcr.io/sap-samples/kyma-mtx-faq-ui:latest # image we pushed
           name: kyma-faq-ui-shell
           imagePullPolicy: Always
           env:

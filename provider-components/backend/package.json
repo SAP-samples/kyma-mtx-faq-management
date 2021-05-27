@@ -1,0 +1,68 @@
+{
+  "name": "faq",
+  "version": "1.0.0",
+  "description": "A simple FAQ CAP project.",
+  "private": true,
+  "dependencies": {
+    "@sap/audit-logging": "^5.0.0",
+    "@sap/cds": "^5.0.4",
+    "@sap/cds-mtx": "^1.2.0",
+    "@sap/hana-client": "^2.7.26",
+    "@sap/hdi-deploy": "^4.0.4",
+    "@sap/instance-manager": "^2",
+    "@sap/xsenv": "^3.1.0",
+    "@sap/xssec": "^3.1.2",
+    "express": "^4.17.1",
+    "passport": "^0.4.1"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.0.2"
+  },
+  "scripts": {
+    "start": "cds run",
+    "debug": "npx --node-arg=--inspect cds run",
+    "deploy:cf": "mbt build && cf deploy mta_archives/faq_1.0.0.mtar -f"
+  },
+  "cds": {
+    "mtx": {
+      "element-prefix": [
+        "Z_",
+        "ZZ_"
+      ],
+      "namespace-blacklist": [
+        "com.sap.",
+        "sap."
+      ],
+      "entity-whitelist": [
+        "sap.demo.faq.Authors",
+        "sap.demo.faq.Categories",
+        "sap.demo.faq.Faqs"
+      ],
+      "service-whitelist": [
+        "AdminService"
+      ]
+    },
+    "odata": {
+      "version": "v4"
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
+    },
+    "requires": {
+      "db": {
+        "kind": "hana",
+        "model": [
+          "db",
+          "srv"
+        ],
+        "multiTenant": true,
+        "vcap": {
+          "label": "service-manager"
+        }
+      },
+      "uaa": {
+        "kind": "xsuaa"
+      }
+    }
+  }
+}

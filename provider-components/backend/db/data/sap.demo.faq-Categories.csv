@@ -1,0 +1,8 @@
+ID;name;parent_ID
+10;Technology;
+11;Kyma;10
+12;CAP;10
+13;Fundamental Library;10
+14;Luigi;10
+20;Market;
+21;Germany;20

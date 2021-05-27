@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit FAQ's</title>
+    <!--<link rel='stylesheet' href='/fundamental-styles/dist/fundamental-styles.css'>-->
+    <link rel="stylesheet" href="https://unpkg.com/primitive-ui/dist/css/main.css">
+    <link href="//unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css" rel="stylesheet">
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script src="../luigi-client/luigi-client.js"></script>
+
+    <div>
+        <div class="fd-page" id='app_edit'>
+            <header class="fd-page__header">
+                <div class="fd-action-bar">
+                    <div class="fd-action-bar__header">
+                        <h3 class="fd-action-bar__title">
+                            Edit FAQs
+                        </h3>
+                        <button class="fd-button fd-button--compact" v-on:click="add">Add</button>
+                    </div>
+                    <p class="fd-action-bar__description">Select any FAQ entry from the list to edit it</p>
+                </div>
+            </header>
+
+            <div class="fd-page__content">
+                <section class="fd-section">
+
+                    <input type="text" placeholder="Search..." @input="search">
+
+                    <table id='faqs' class="fd-table">
+                        <thead class="fd-table__header">
+                            <tr class="fd-table__row">
+                                <th class="fd-table__cell fd-table__cell--status-indicator"></th>
+                                <th class="fd-table__cell fd-table__cell--activable fd-table__cell--hoverable"
+                                    scope="col">FAQ</th>
+                                <th class="fd-table__cell fd-table__cell--activable fd-table__cell--hoverable"
+                                    scope="col">Question</th>
+                                <th class="fd-table__cell fd-table__cell--activable fd-table__cell--hoverable"
+                                    scope="col">Answer</th>
+                                <th class="fd-table__cell fd-table__cell--activable fd-table__cell--hoverable"
+                                    scope="col">Author</th>
+                                <th class="fd-table__cell fd-table__cell--activable fd-table__cell--hoverable"
+                                    scope="col">Category</th>
+                                <th class="fd-table__cell fd-table__cell--activable fd-table__cell--hoverable"
+                                    scope="col">State</th>
+                            </tr>
+                        </thead>
+                        <tbody class="fd-table__body">
+                            <tr v-for="faq in list" v-bind:id="faq.ID" v-on:click="inspect"
+                                class="fd-table__row fd-table__row--activable fd-table__row--hoverable">
+                                <td class="fd-table__cell fd-table__cell--status-indicator"
+                                    v-bind:class="{ 'fd-table__cell--status-indicator--valid': faq.state == 'answered', 'fd-table__cell--status-indicator--error': faq.state == 'open', 'fd-table__cell--status-indicator--information': faq.state == 'duplicate'}">
+                                </td>
+                                <td class="fd-table__cell">{{ faq.title }}</td>
+                                <td class="fd-table__cell">{{ faq.descr }}</td>
+                                <td class="fd-table__cell">{{ faq.answer }}</td>
+                                <td class="fd-table__cell">{{ faq.author.name }}</td>
+                                <td class="fd-table__cell">{{ faq.category.name }}</td>
+                                <td class="fd-table__cell">{{ faq.state }}</td>
+                        </tbody>
+
+                        </tr>
+                    </table>
+
+                    <div v-if="faq">
+
+                        <h4> {{ faq.title }} </h4>
+                        <p>Question: {{ faq.descr }} </p>
+                        <p>Answer: {{ faq.answer }} </p>
+
+                    </div>
+                    <div v-else>
+                        ( click on a row to see details... )
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="admin.js"></script>
+
+</html>

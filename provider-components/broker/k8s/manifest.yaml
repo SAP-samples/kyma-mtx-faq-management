@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project-faq
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faq-broker
+  namespace: project-faq
+  labels:
+    app: faq-broker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faq-broker
+  template:
+    metadata:
+      labels:
+        app: faq-broker
+    spec:
+      containers:
+        - name: faq-broker
+          image: iobert/broker:latest
+          args:
+            - "--targetServiceName"
+            - "faq-backend"
+            - "--targetServicePort"
+            - "8080"
+            - "--saasAppServiceName"
+            - "kyma-faq-ui-shell"
+            - "--saasAppServicePort"
+            - "5000"
+            - "--kymaDomain"
+            - "$(CLUSTER_DOMAIN)"
+            - "--resourceNamespace"
+            - "project-faq"
+            - "--capProvisioningURL"
+            - "http://faq-backend:8080"
+          imagePullPolicy: Always
+          env:
+            - name: CLUSTER_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  key: cluster-domain
+                  name: cluster-domain
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          resources:
+            limits:
+              cpu: 200m
+              memory: 32Mi
+            requests:
+              cpu: 100m
+              memory: 16Mi
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: faq-broker
+  namespace: project-faq
+  labels:
+    app: faq-broker
+spec:
+  selector:
+    app: faq-broker
+  ports:
+    - protocol: TCP
+      name: saas-provisioner
+      port: 8081
+---
+apiVersion: gateway.kyma-project.io/v1alpha1
+kind: APIRule
+metadata:
+  name: subscription
+  namespace: project-faq
+spec:
+  gateway: kyma-gateway.kyma-system.svc.cluster.local
+  rules:
+    - accessStrategies:
+        - config: {}
+          handler: noop
+      methods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - HEAD
+      path: /.*
+  service:
+    host: subscription
+    name: faq-broker
+    port: 8081
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: faq-broker-binding
+  namespace: project-faq
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: project-faq
+roleRef:
+  kind: ClusterRole
+  name: kyma-namespace-admin
+  apiGroup: rbac.authorization.k8s.io

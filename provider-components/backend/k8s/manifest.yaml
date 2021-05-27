@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project-faq
+
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-service-binding-usage-backend
+  namespace: project-faq
+spec:
+  parameters:
+    envPrefix:
+      name: xsuaa_
+  serviceBindingRef:
+    name: xsuaa-service-binding
+  usedBy:
+    kind: deployment
+    name: faq-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: faq-backend
+  namespace: project-faq
+  labels:
+    app: faq-backend
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 4004 
+  selector:
+    app: faq-backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faq-backend
+  namespace: project-faq
+  labels:
+    app: faq-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faq-backend
+  template:
+    metadata:
+      labels: # labels to select/identify the deployment
+        app: faq-backend
+    spec:     # pod spec
+      containers:
+        - image: iobert/backend:latest # image we pushed
+          name: faq-backend
+          imagePullPolicy: Always
+          env:
+            - name: SM_CREDENTIALS
+              valueFrom:
+                secretKeyRef:
+                  key: credentials
+                  name: sm-credentials
+            - name: VCAP_SERVICES
+              value: >
+                {
+                      "xsuaa": [{
+                        "label": "xsuaa",
+                        "provider": null,
+                        "plan": "broker",
+                        "name": "reviews-xsuaa",
+                        "tags": [
+                          "xsuaa"
+                        ],
+                        "instance_name": "reviews-xsuaa",
+                        "binding_name": null,
+                        "credentials": {
+                          "tenantmode": "$(xsuaa_tenantmode)",
+                          "sburl": "$(xsuaa_sburl)",
+                          "clientid": "$(xsuaa_clientid)",
+                          "xsappname": "$(xsuaa_xsappname)",
+                          "clientsecret":"$(xsuaa_clientsecret)",
+                          "url": "$(xsuaa_url)",
+                          "uaadomain": "$(xsuaa_uaadomain)",
+                          "trustedclientidsuffix": "$(xsuaa_trustedclientidsuffix)",
+                          "verificationkey": "$(xsuaa_verificationkey)",
+                          "apiurl": "$(xsuaa_apiurl)",
+                          "identityzone": "$(xsuaa_identityzone)",
+                          "identityzoneid": "$(xsuaa_identityzoneid)",
+                          "tenantid": "$(xsuaa_tenantid)",
+                          "zoneid": "$(xsuaa_zoneid)"
+                        },
+                        "syslog_drain_url": null,
+                        "volume_mounts": []
+                      }],
+                      "service-manager": [{
+                        "binding_name": null,
+                        "credentials": $(SM_CREDENTIALS),
+                        "instance_name": "sm",
+                        "label": "service-manager",
+                        "name": "sm",
+                        "plan": "container",
+                        "provider": null,
+                        "syslog_drain_url": null,
+                        "tags": [],
+                        "volume_mounts": []
+                      }]
+                    }
+            - name: NODE_ENV
+              value: production
+          ports:
+            - name: http
+              containerPort: 4004

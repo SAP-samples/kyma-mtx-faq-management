@@ -1,0 +1,55 @@
+{
+    "authenticationMethod": "route",
+    "sessionTimeout": 10,
+    "logout": {
+        "logoutEndpoint": "/logout",
+        "logoutPage": "/logout.html"
+    },
+    "routes": [
+        {
+            "source": "^/ui/faq/(.*)$",
+            "destination": "faq-backend",
+            "target": "$1",
+            "authenticationType": "xsuaa"
+        },
+        {
+            "source": "^/admin/(.*)$",
+            "destination": "faq-backend",
+            "target": "/admin/$1",
+            "authenticationType": "xsuaa",
+            "csrfProtection": false
+        },
+        {
+            "source": "^/csv/(.*)$",
+            "destination": "csv-service",
+            "target": "$1",
+            "authenticationType": "xsuaa"
+        },
+        {
+            "source": "^/luigi-core/(.*)$",
+            "target": "$1",
+            "localDir": "node_modules/@luigi-project/core"
+        },
+        {
+            "source": "^/luigi-client/(.*)$",
+            "target": "$1",
+            "localDir": "node_modules/@luigi-project/client"
+        },
+        {
+            "source": "^/fundamental-styles/(.*)$",
+            "target": "$1",
+            "localDir": "node_modules/fundamental-styles"
+        },
+        {
+            "source": "^/logout.html$",
+            "localDir": "public",
+            "authenticationType": "none"
+        },
+        {
+            "source": "^/(.*)$",
+            "target": "$1",
+            "localDir": "public",
+            "authenticationType": "xsuaa"
+        }
+    ]
+}

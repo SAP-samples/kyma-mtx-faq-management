@@ -1,0 +1,107 @@
+{
+    "_version": "1.32.0",
+    "sap.app": {
+        "id": "faq.listreport",
+        "type": "application",
+        "applicationVersion": {
+            "version": "1.0.0"
+        },
+        "title": "FAQ Report",
+        "description": "List Report Object Page",
+        "dataSources": {
+            "mainService": {
+                "uri": "/admin/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [
+                        "annotation"
+                    ],
+                    "odataVersion": "4.0"
+                }
+            }
+        },
+        "offline": false,
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "ui5template.fiorielements.v4.lrop",
+            "version": "1.0.0"
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "dependencies": {
+            "minUI5Version": "1.76.0",
+            "libs": {
+                "sap.ui.core": {},
+                "sap.fe.templates": {}
+            }
+        },
+        "models": {
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "synchronizationMode": "None",
+                    "operationMode": "Server",
+                    "autoExpandSelect": true,
+                    "earlyRequests": true
+                }
+            }
+        },
+        "routing": {
+            "routes": [
+                {
+                    "pattern": ":?query:",
+                    "name": "FaqsList",
+                    "target": "FaqsList"
+                },
+                {
+                    "pattern": "Faqs({key}):?query:",
+                    "name": "FaqsObjectPage",
+                    "target": "FaqsObjectPage"
+                }
+            ],
+            "targets": {
+                "FaqsList": {
+                    "type": "Component",
+                    "id": "FaqsList",
+                    "name": "sap.fe.templates.ListReport",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Faqs",
+                            "variantManagement": "Page",
+                            "navigation": {
+                                "Faqs": {
+                                    "detail": {
+                                        "route": "FaqsObjectPage"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "FaqsObjectPage": {
+                    "type": "Component",
+                    "id": "FaqsObjectPage",
+                    "name": "sap.fe.templates.ObjectPage",
+                    "options": {
+                        "settings": {
+                            "entitySet": "Faqs"
+                        }
+                    }
+                }
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        }
+    }
+}

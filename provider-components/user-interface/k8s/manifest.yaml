@@ -1,0 +1,212 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: project-faq
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: faq-xsuaa
+  namespace: project-faq
+spec:
+  clusterServiceClassExternalName: xsuaa
+  clusterServicePlanExternalName: broker
+  parameters:
+    xsappname: faq-app
+    tenant-mode: shared
+    scopes:
+      - name: "$XSAPPNAME.View"
+        description: "View FAQs"
+      - name: "$XSAPPNAME.Admin"
+        description: "Administrate FAQs"
+      - name: "uaa.user"
+        description: "uaa"
+      - name: "$XSAPPNAME.Callback"
+        description: "Callbacks for tenant onboarding"
+        grant-as-authority-to-apps:
+          - "$XSAPPNAME(application,sap-provisioning,tenant-onboarding)"
+    role-templates:
+      - name: "Token_Exchange"
+        description: "UAA"
+        scope-references:
+          - "uaa.user"
+      - name: Viewer
+        description: Read Access to FAQs
+        scope-references:
+          - "$XSAPPNAME.View"
+      - name: Admin
+        description: "Read Access to FAQs"
+        scope-references:
+          - "$XSAPPNAME.Admin"
+    oauth2-configuration:
+      redirect-uris:
+        # TODO(For the User): Adapt to the cluster domain
+        - "https://**.c-13093b0.kyma.shoot.live.k8s-hana.ondemand.com/**"
+        - "http://**/*"
+        - "http://*/**"
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: xsuaa-service-binding
+  namespace: project-faq
+spec:
+  instanceRef:
+    name: faq-xsuaa
+
+---
+apiVersion: servicecatalog.kyma-project.io/v1alpha1
+kind: ServiceBindingUsage
+metadata:
+  name: xsuaa-service-binding-usage-ui
+  namespace: project-faq
+spec:
+  parameters:
+    envPrefix:
+      name: xsuaa_
+  serviceBindingRef:
+    name: xsuaa-service-binding
+  usedBy:
+    kind: deployment
+    name: kyma-faq-ui-shell
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: destinations-kyma-faq
+  namespace: project-faq
+type: Opaque
+stringData:
+  destinations: >-
+    [
+        {
+          "name": "faq-backend",
+          "url": "http://faq-backend.project-faq.svc.cluster.local:8080",
+          "forwardAuthToken": true
+        },
+        {
+          "name": "csv-service",
+          "url": "http://csv-service.project-faq.svc.cluster.local:80",
+          "forwardAuthToken": true
+        }
+    ]
+
+---
+# Resource to create instance for SaaS Registry services
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceInstance
+metadata:
+  name: faq-saas-registry
+  namespace: project-faq
+spec:
+  clusterServiceClassExternalName: saas-registry
+  clusterServicePlanExternalName: application
+  parameters:
+    xsappname: faq-app
+    appName: FaqManagement
+    displayName: FAQ Saas Sample
+    description: "A fully working SaaS Application for FAQ Management"
+    category: "Powered by Kyma"
+    appUrls:
+      # TODO(For the User): Adapt to the cluster domain
+      # url registered in the broker which handles SaaS provisioning (subscription/deletion of saas instances)
+      onSubscription: https://subscription.c-13093b0.kyma.shoot.live.k8s-hana.ondemand.com/subscription/tenants/{tenantId}
+---
+apiVersion: servicecatalog.k8s.io/v1beta1
+kind: ServiceBinding
+metadata:
+  name: faq-saas-registry-service-binding
+  namespace: project-faq
+spec:
+  instanceRef:
+    name: faq-saas-registry
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kyma-faq-ui-shell
+  namespace: project-faq
+  labels:
+    app: kyma-faq-ui-shell
+spec:
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+  selector:
+    app: kyma-faq-ui-shell
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kyma-faq-ui-shell
+  namespace: project-faq
+  labels:
+    app: kyma-faq-ui-shell
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kyma-faq-ui-shell
+  template:
+    metadata:
+      labels:
+        app: kyma-faq-ui-shell
+    spec:
+      containers:
+        - image: iobert/ui:latest # image we pushed
+          name: kyma-faq-ui-shell
+          imagePullPolicy: Always
+          env:
+            - name: destinations
+              valueFrom:
+                secretKeyRef:
+                  name: destinations-kyma-faq
+                  key: destinations
+            - name: CLUSTER_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  key: cluster-domain
+                  name: cluster-domain
+            - name: TENANT_HOST_PATTERN
+              value: "^(.*).$(CLUSTER_DOMAIN)"
+            - name: VCAP_SERVICES
+              value: >
+                {
+                      "xsuaa": [{
+                        "label": "xsuaa",
+                        "provider": null,
+                        "plan": "broker",
+                        "name": "reviews-xsuaa",
+                        "tags": [
+                          "xsuaa"
+                        ],
+                        "instance_name": "reviews-xsuaa",
+                        "binding_name": null,
+                        "credentials": {
+                          "tenantmode": "$(xsuaa_tenantmode)",
+                          "sburl": "$(xsuaa_sburl)",
+                          "clientid": "$(xsuaa_clientid)",
+                          "xsappname": "$(xsuaa_xsappname)",
+                          "clientsecret":"$(xsuaa_clientsecret)",
+                          "url": "$(xsuaa_url)",
+                          "uaadomain": "$(xsuaa_uaadomain)",
+                          "trustedclientidsuffix": "$(xsuaa_trustedclientidsuffix)",
+                          "verificationkey": "$(xsuaa_verificationkey)",
+                          "apiurl": "$(xsuaa_apiurl)",
+                          "identityzone": "$(xsuaa_identityzone)",
+                          "identityzoneid": "$(xsuaa_identityzoneid)",
+                          "tenantid": "$(xsuaa_tenantid)",
+                          "zoneid": "$(xsuaa_zoneid)"
+                        },
+                        "syslog_drain_url": null,
+                        "volume_mounts": []
+                      }]
+                    }
+
+          ports:
+            - name: http
+              containerPort: 5000

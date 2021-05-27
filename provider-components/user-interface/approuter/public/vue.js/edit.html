@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit FAQ's</title>
+    <!--<link rel='stylesheet' href='/fundamental-styles/dist/fundamental-styles.css'>-->
+    <link rel="stylesheet" href="https://unpkg.com/primitive-ui/dist/css/main.css">
+    <link href="//unpkg.com/fundamental-styles@latest/dist/fundamental-styles.css" rel="stylesheet">
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <script src="../luigi-client/luigi-client.js"></script>
+
+
+    <div id='app_edit'>
+        <div class="fd-page fd-page--solid">
+            <header class="fd-page__header">
+                <div class="fd-action-bar">
+                    <div class="fd-action-bar__header">
+                        <h3 class="fd-action-bar__title">
+                            Edit FAQs
+                        </h3>
+                    </div>
+                    <p class="fd-action-bar__description">{{ faq.descr }}</p>
+                </div>
+            </header>
+
+            <div class="fd-page__content">
+                <section class="fd-section">
+                    <div class="fd-container">
+                        <div class="fd-row">
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <button form="question_form" v-bind:id="faq.ID" v-on:click="deleteQuestion"
+                                            class="fd-button fd-button--negative">Delete Question</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fd-row">
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <label for="question">Title:</label>
+                                        <textarea name="title" form="question_form" rows="3"
+                                            v-model="faq.title">{{ faq.title }}</textarea>
+                                        <button form="question_form" v-bind:id="faq.ID" v-on:click="saveTitle"
+                                            class="fd-button fd-button--positive fd-button--compact ">Save
+                                            Title</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <label for="question">Question:</label>
+                                        <textarea name="question" form="question_form" rows="3"
+                                            v-model="faq.descr">{{ faq.descr }}</textarea>
+                                        <button form="question_form" v-bind:id="faq.ID" v-on:click="saveQuestion"
+                                            class="fd-button fd-button--positive fd-button--compact ">Save
+                                            Question</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <label for="answer">Answer:</label>
+                                        <textarea name="answer" form="question_form" rows="3"
+                                            v-model="faq.answer">{{ faq.answer }}</textarea>
+                                        <button form="question_form" v-on:click="saveAnswer"
+                                            class="fd-button fd-button--positive fd-button--compact ">Save
+                                            Answer</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <label for="category">Category:</label>
+                                        <select name="category" id="category" form="question_form" v-model="faq.category">
+                                            <option v-for="category in categories" v-bind:value="category">{{category.name}}
+                                            </option>
+                                        </select>
+                                        <button form="question_form" v-on:click="saveCategory"
+                                            class="fd-button fd-button--positive fd-button--compact ">Change
+                                            Category</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <label for="state">State:</label>
+                                        <select name="state" id="state" form="question_form" v-model="faq.state">
+                                            <option v-for="state in states">{{state}}</option>
+                                        </select>
+                                        <button form="question_form" v-on:click="saveState"
+                                            class="fd-button fd-button--positive fd-button--compact ">Change Publish
+                                            State</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fd-col fd-col--12">
+                                <div class="fd-layout-panel">
+                                    <div class="fd-layout-panel__body">
+                                        <label for="author">Author:</label>
+                                        <select name="author" id="author" form="question_form" v-model="faq.author">
+                                            <option v-for="author in authors" v-bind:value="author">{{author.name}}
+                                            </option>
+                                        </select>
+                                        <button form="question_form" v-on:click="saveAuthor"
+                                            class="fd-button fd-button--positive fd-button--compact ">Change
+                                            Author</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+                
+            </div>
+            
+        </div>
+    </div>
+
+
+
+</body>
+<script src="edit.js"></script>
+
+</html>

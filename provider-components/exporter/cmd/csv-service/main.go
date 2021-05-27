@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/anishj0shi/csv-exporter/pkg/api"
-	"github.com/anishj0shi/csv-exporter/pkg/client"
+	"github.com/sap-samples/csv-exporter/pkg/api"
+	"github.com/sap-samples/csv-exporter/pkg/client"
 	"github.com/kelseyhightower/envconfig"
 	log "github.com/sirupsen/logrus"
 	"net/http"

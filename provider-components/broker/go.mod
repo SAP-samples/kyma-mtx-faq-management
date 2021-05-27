@@ -1,6 +1,6 @@
 module broker
 
-go 1.14
+go 1.16
 
 require (
 	code.cloudfoundry.org/lager v2.0.0+incompatible

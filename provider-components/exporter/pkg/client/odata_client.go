@@ -3,7 +3,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/anishj0shi/csv-exporter/pkg/api"
+	"github.com/sap-samples/csv-exporter/pkg/api"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"net/http/httputil"

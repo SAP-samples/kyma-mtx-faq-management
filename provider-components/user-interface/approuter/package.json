@@ -5,11 +5,11 @@
     "start": "node approuter-start.js"
   },
   "dependencies": {
-    "@luigi-project/client": "1.2.4",
-    "@luigi-project/core": "1.2.4",
-    "@sap-theming/theming-base-content": "11.1.20",
-    "@sap/approuter": "^8.5.2",
-    "fundamental-styles": "0.4.1",
+    "@luigi-project/client": "1.12.1",
+    "@luigi-project/core": "1.12.1",
+    "@sap-theming/theming-base-content": "11.1.29",
+    "@sap/approuter": "^10.4.0",
+    "fundamental-styles": "0.18.0",
     "jwt-decode": "^3.1.2"
   }
 }

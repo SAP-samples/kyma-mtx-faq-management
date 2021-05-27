@@ -1,6 +1,5 @@
-FROM node:12.18.1 as builder
+FROM node:14-alpine as builder
 USER root
-RUN apt-get update && apt-get install -y python3
 RUN npm i -g @sap/cds-dk
 # create work directory and copy sources  
 WORKDIR /cap
@@ -9,7 +8,8 @@ COPY . .
 RUN npm install
 #execute build
 RUN cds build --production
-FROM node:12.18.1
+
+FROM node:14-alpine
 # Set production environment
 ENV NODE_ENV=production
 # Create app directory

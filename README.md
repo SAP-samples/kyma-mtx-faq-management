@@ -1,5 +1,9 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/kyma-mtx-faq-management)](https://api.reuse.software/info/github.com/SAP-samples/kyma-mtx-faq-management)
+
+
 # Multi-tenant FAQ Management Application on SAP BTP, Kyma Runtime
 
+[![Video here](https://img.youtube.com/vi/hnD7Lr_2464/0.jpg)](https://www.youtube.com/watch?v=hnD7Lr_2464)
 
 ## About
 

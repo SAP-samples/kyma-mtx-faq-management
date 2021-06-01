@@ -1,6 +1,6 @@
 # Subscribed as a consumer
 
-Now that you deployed all provider components (go [here](../provider-components/README.md) if you haven't done this yet), it's time to subscribe your subaccount to the SaaS solution. You can subscribe from *any* subaccount that lives in the **same region** and belongs to the **same global account** as the provider subaccount. Technically, the provider subaccount itself qualifies here as well.
+Now that you deployed all provider components (go [here](../provider-components/readme.md) if you haven't done this yet), it's time to subscribe your subaccount to the SaaS solution. You can subscribe from *any* subaccount that lives in the **same region** and belongs to the **same global account** as the provider subaccount. Technically, the provider subaccount itself qualifies here as well.
 
 
 ## 1. Find the SaaS solution in the service marketplace

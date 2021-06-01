@@ -32,10 +32,20 @@ As of today, not all required services are available in SAP BTP, Kyma environmen
 3. As of the time of creating this documentation SAP HANA Cloud instances can only be provisioned from within a Cloud Foundry context. Hence there is a bit of manual work required. If you haven't done so yet,  [enable Cloud Foundry](https://developers.sap.com/tutorials/hcp-create-trial-account.html) in your account and create a space. Within the context of that space, [create a new SAP HANA Cloud Database](https://developers.sap.com/tutorials/hana-cloud-deploying.html) instance. **And make sure SAP HANA Cloud is started and allows traffic from all IP addresses.**
 4. Although Service Manager is available as a brokered service in Kyma, it cannot be used in this context. Instead, the instance of `service-manager` (plan `container`) must be created in the Cloud Foundry space, where the SAP HANA Cloud instance lives. Then, the service key needs to be created and exposed as Kubernetes secret. The backend component will use this secret later on to provision HDI containers on demand.
     - Use the CF CLI to create this instance and download a service key.
+    
+    Unix:
     ```
     cf create-service service-manager container faq-saas-container
     cf create-service-key faq-saas-container faq-container-key
     cf service-key faq-saas-container faq-container-key | tail -n +3 > faq-container-key.json
+    ```
+        
+    Windows:
+    ```
+    cf create-service service-manager container faq-saas-container
+    cf create-service-key faq-saas-container faq-container-key
+    cf service-key faq-saas-container faq-container-key > faq-container-key.json
+    # Windows users must remove the first 3 lines of this file manually before proceeding
     ```
     - Create a Kubernetes secret to make this service key available to Kyma
     ```

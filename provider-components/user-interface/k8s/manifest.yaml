@@ -104,7 +104,8 @@ spec:
   clusterServicePlanExternalName: application
   parameters:
     xsappname: faq-app
-    appName: FaqManagement
+   # TODO(For the User): Change to the cluster domain identifier
+    appName: FaqManagement-c-13093b0
     displayName: FAQ Saas Sample
     description: "A fully working SaaS Application for FAQ Management"
     category: "Powered by Kyma"

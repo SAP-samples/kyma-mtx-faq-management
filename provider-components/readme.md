@@ -26,7 +26,7 @@ As of today, not all required services are available in SAP BTP, Kyma environmen
     ```
     > You can find your cluster-ID in the URL of the Kyma console.
 
-2. Add the cluster domain next to the `TODO(For the User)` comments in the components manifest for later:
+2. Add the cluster domain (or the cluster domain identifier) next to the `TODO(For the User)` comments in the components manifest for later:
     - provider-components/user-interface/k8s/manifest.yaml
 
 3. As of the time of creating this documentation SAP HANA Cloud instances can only be provisioned from within a Cloud Foundry context. Hence there is a bit of manual work required. If you haven't done so yet,  [enable Cloud Foundry](https://developers.sap.com/tutorials/hcp-create-trial-account.html) in your account and create a space. Within the context of that space, [create a new SAP HANA Cloud Database](https://developers.sap.com/tutorials/hana-cloud-deploying.html) instance. **And make sure SAP HANA Cloud is started and allows traffic from all IP addresses.**

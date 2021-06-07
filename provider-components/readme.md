@@ -42,7 +42,7 @@ As of today, not all required services are available in SAP BTP, Kyma environmen
         
     Windows:
     Windows users must remove the first 3 lines of this file manually before proceeding
-    > Important: Your machine might use UTF-16 LE encoding for this file when executed in Powershell. This is **not what we want**! Change the encoding to UTF-8 manually to avoid an [issue](/../../../issues/1) later on.
+    > Important: Your machine might use UTF-16 LE encoding for this file when executed in Powershell. This is **not what we want**! Change the encoding to UTF-8 manually to avoid an [issue](/../../issues/1) later on.
     ```
     cf create-service service-manager container faq-saas-container
     cf create-service-key faq-saas-container faq-container-key

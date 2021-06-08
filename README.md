@@ -28,7 +28,7 @@ Make sure you have the following tools installed and services provisioned:
 * Install the [Kubernetes Command Line Interface (CLI)](https://developers.sap.com/tutorials/cp-kyma-download-cli.html)
 * Install the [Cloud Foundry CLI](https://developers.sap.com/tutorials/cp-cf-download-cli.html)
 
-We will use a few SAP BTP services during the deployment. Please make sure you have the proper entitlements for the following services:
+We will use a few SAP BTP services during the deployment. Please make sure you see the following services in the SAP BTP Cockpit service marketplace:
 
 * SAP HANA Schemas & HDI Containers (`hdi-shared` plan)
 * SaaS Provisioning (`container` and `application` plans)

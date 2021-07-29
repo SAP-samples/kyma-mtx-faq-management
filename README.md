@@ -60,7 +60,7 @@ Please be aware that this project still contains a few workarounds and takes "te
 Please use the GitHub bug tracking system to post questions and bug reports.
 
 
-## Knows Issues
+## Known Issues
 None so far
 
 
